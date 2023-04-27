@@ -38,8 +38,18 @@ class JTSON(object):
             f.write(compressed_data.hex().encode())
         return True
 
-   
-
+    # def set(self, key, value):
+    #     """ Adds the key value pair to database """
+    #     try:
+    #         key_hash = hashlib.sha256(key.encode()).hexdigest()
+    #         if not isinstance(value, str):
+    #             value = str(value)
+    #         self.db[key_hash] = value.encode()
+    #         self.dumpdb()
+    #         return True
+    #     except Exception as e:
+    #         print("[X] Error Saving Values to Database : "+str(e))
+    #         return False
 
     def set(self, key, value):
         """ Adds the key value pair to database """
@@ -47,7 +57,7 @@ class JTSON(object):
             key_hash = hashlib.sha256(key.encode()).hexdigest()
             if not isinstance(value, str):
                 value = str(value)
-            self.db[key_hash] = value.encode()
+            self.db[key_hash] = value
             self.dumpdb()
             return True
         except Exception as e:
@@ -58,7 +68,7 @@ class JTSON(object):
         """ Gets the value corresponding to the key """
         try:
             key_hash = hashlib.sha256(key.encode()).hexdigest()  #Hashlib secure hashes and message digests. In this we use sha256() to create a SHA-256 hash object.
-            return self.db[key_hash].decode()
+            return self.db[key_hash]
         except KeyError:
             print("No Value Can Be Found for "+ str(key))
             return False
