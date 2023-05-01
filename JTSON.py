@@ -2,14 +2,21 @@ import os
 import ujson as json
 import hashlib
 import zlib
+import traceback
 
 class JTSON(object):
     def __init__(self, location):
         self.location = os.path.expanduser(location)    # This is the path and filename of the database file
         self.load(self.location) 
 
+    # def __repr__(self):
+    #     return "Your JTSON database at {}".format(str(self.location))
+    
+    def __str__(self):
+        return f"JTSON database at {self.location}"
+
     def __repr__(self):
-        return "Your JTSON database at {}".format(str(self.location))
+        return f"{self.__class__.__name__}({self.location})"
     
     def load(self, location):
         """  Loads the database from file into memory if file exists  by calling _load(self) else, ccreates a new one"""
@@ -21,10 +28,11 @@ class JTSON(object):
 
     def _load(self):
         """ Loads the database file into memory using Json format"""
-        with open(self.location, 'r') as f:
+        with open(self.location, 'rb') as f:
             data = f.read()
+            print("data",data)
             if data:
-                compressed_data = bytes.fromhex(data) #Create a bytes object from a string of hexadecimal numbers.
+                compressed_data = bytes.fromhex(data.decode()) #Create a bytes object from a string of hexadecimal numbers.
                 decompressed_data = zlib.decompress(compressed_data) #The functions in this module allow compression and decompression using the zlib library, which is based on GNU zip.
                 self.db = json.loads(decompressed_data.decode())
             else:
@@ -62,6 +70,7 @@ class JTSON(object):
             return True
         except Exception as e:
             print("[X] Error Saving Values to Database : "+str(e))
+            traceback.print_exc()
             return False
 
     def get(self, key):
@@ -76,6 +85,7 @@ class JTSON(object):
     def get_all(self):
         """ Returns all key value pairs in database """
         return self.db
+        
     
     def delete(self, key):
         """ removes the key and related value pair from database"""
