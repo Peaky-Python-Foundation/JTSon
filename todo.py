@@ -15,6 +15,8 @@ class Todo:
 
     def list_tasks(self):
         tasks = self.db.get_all()
+        print((tasks))
+        
         if not tasks:
             print("No tasks found!")
         else:
@@ -22,6 +24,9 @@ class Todo:
             for task, done in tasks.items():
                 done_str = "Done" if done == b'True' else "Not Done"
                 print(f"\t{task}: {done_str}")
+                
+                # print(self.db.get(("cricket")))
+                # print(self.db.get(task))
 
 if __name__ == '__main__':
     todo = Todo()
